@@ -4,31 +4,18 @@
 #include <iomanip>
 using namespace std;
 
-bool canDetonateAll(const vector<int>& pos, double R) {
-    for(int i = 0; i < pos.size(); i++) {
-        
+using ll = long long;
 
-}
-int main() {
-    int N;
-    cin >> N;
-    vector<int> pos(N);
-    for (int i = 0; i < N; ++i) cin >> pos[i];
-    sort(pos.begin(), pos.end());
+const int MAX_POS = 1e9;
 
-    // TODO: Implement binary search on R and simulation
-    
-    // Example output (replace with actual answer)
+int main(){
+    int n;
+    cin >> n;
+    vector<int> bales(n);
+	for (int i = 0; i < n; i++) {
+		cin >> bales[i];
+		// to avoid floats, double all coordinates
+	}
+    sort(bales.begin(), bales.end());
 
-    while (right - left > 0.05) { // 0.05 ensures correct rounding to 1 decimal
-        double mid = left + (right-left)/ 2.0;
-        if (canDetonateAll(pos, mid)) {
-            right = mid;
-        } else {
-            left = mid;
-        }
-    }
-
-    cout << fixed << setprecision(1) << 3.0 << endl;
-    return 0;
 }
