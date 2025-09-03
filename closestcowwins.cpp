@@ -1,59 +1,80 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int main(){
-	long long k, m, n; cin >> k >> m >> n;
-	vector<pair<long long, long long>> locations; vector<long long> res;
-	for(long long i = 0; i < k; i++){
-		long long p, t; 
-        cin >> p >> t;
-		locations.push_back({p, t});
+int main() {
+	cin.tie(NULL)->sync_with_stdio(false);
+
+	long long k, m, n;
+	cin >> k >> m >> n;
+
+	pair<long long, long long> a[k+m];
+
+	for(long long i = 0; i < k; i++) cin >> a[i].first >> a[i].second;
+
+	for(long long i = 0; i < m; i++)
+	{
+		cin >> a[i+k].first;
+		a[i+k].second = -1;
 	}
-	for(long long i = 0; i < m; i++){
-		long long f; 
-        cin >> f;
-		locations.push_back({f, -1});
-	}
-	sort(begin(locations), end(locations));
-	long long twoCow = 0, lst = -1;
-	for(long long i = 0; i < k + m; i++){
-		if(locations[i].second != -1){
-			twoCow += locations[i].second;
-		} else {
-			if(lst == -1){
-				res.push_back(twoCow);
-			} else {
-				long long oneCow = 0, curSum = 0;
-				long long l = lst + 1, r = lst + 1;
-				while(r <= i){
-					if(locations[r].second == -1){
-						break;
-					} else {
-						long long dist1 = (locations[r].first - locations[l].first);
-						long long dist2 = (locations[r].first - locations[lst].first);
-						long long dist3 = (locations[i].first - locations[r].first);
-						if(dist1 <= dist2 && dist1 <= dist3){
-							curSum += locations[r].second;
-							r++;
-						} else {
-							oneCow = max(oneCow, curSum);
-							curSum -= locations[l].second;
-							l++;
-						}
+
+	sort(a, a+k+m);
+
+	long long ind = -1, sum = 0;
+
+	vector<long long> v;
+
+	for(long long i = 0; i < k+m; i++)
+	{
+		if(a[i].second==-1)
+		{
+			if(ind==-1)
+			{
+				v.emplace_back(sum);
+			}
+			else
+			{
+				long long mx = 0, sm = 0, l = ind+1, r = ind;
+				while(l<=r+1 && r<i)
+				{
+					long long x = min(a[i].first - a[l].first, a[l].first - a[ind].first);
+					long long y = min(a[i].first - a[r+1].first, a[r+1].first - a[ind].first);
+
+					if(a[l].first + x - 1 >= a[r+1].first + y - 1)
+					{
+						r++;
+						sm += a[r].second;
+						mx = max(sm, mx);
+					}
+					else
+					{
+						sm -= a[l].second;
+						l++;
 					}
 				}
-				res.push_back(oneCow);
-				res.push_back(twoCow - oneCow);
+
+				v.emplace_back(mx);
+				v.emplace_back(sum - mx);
 			}
-			lst = i;
-			twoCow = 0;
+
+			sum = 0;
+			ind = i;
+		}
+		else
+		{
+			sum += a[i].second;
 		}
 	}
-	res.push_back(twoCow);
-	sort(begin(res), end(res), greater<long long>()); long long ans = 0;
-	for(long long i = 0; i < n; i++){
-		ans += res[i];
+
+	v.emplace_back(sum);
+
+	long long ans = 0;
+
+	sort(v.rbegin(), v.rend());
+
+	for(long long i  = 0; i < n; i++)
+	{
+		ans += v[i];
 	}
-	cout << ans << endl;
+
+	cout << ans << "\n";
 }
