@@ -23,7 +23,7 @@ int main() {
 		for (int i = 0; i < min(N, K - full); i++) { bessie += B[i] % s; }
 		m = max(m, bessie);
 	}
-
+	
 	freopen("berries.out", "w", stdout);
 	cout << m << endl;
 }
